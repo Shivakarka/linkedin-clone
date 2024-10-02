@@ -17,6 +17,9 @@ mongoose.connect(MongoDBUrl)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
+app.get('/', (req, res) => {    
+    res.send('Hello, World!');
+});
 
 if (require.main === module) {
   app.listen(PORT, () => {
