@@ -69,7 +69,43 @@ export const login = async (
   res: Response,
   next?: NextFunction
 ) => {
-  res.send("Login endpoint");
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ message: "Username and password are required" });
+    }
+
+    // Check if user exists
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // Create and send token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
+      expiresIn: "3d",
+    });
+    res.cookie("jwt-linkedin", token, {
+      httpOnly: true,
+      maxAge: 3 * 24 * 60 * 60 * 1000,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    res.json({ message: "Logged in successfully" });
+  } catch (error) {
+    console.error("Error in login controller:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 export const logout = async (
@@ -77,5 +113,6 @@ export const logout = async (
   res: Response,
   next?: NextFunction
 ) => {
-  res.send("Logout endpoint");
+  res.clearCookie("jwt-linkedin");
+  res.json({ message: "Logged out successfully" });
 };
