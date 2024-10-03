@@ -1,6 +1,47 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+type Experience = {
+  title: string;
+  company: string;
+  startDate: Date;
+  endDate: Date;
+  description: string;
+};
+
+type Education = {
+  school: string;
+  fieldOfStudy: string;
+  startYear: number;
+  endYear: number;
+};
+
+type Connection = {
+  userId: mongoose.Schema.Types.ObjectId;
+};
+
+interface IUser {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  profilePicture?: string;
+  coverPicture?: string;
+  headline?: string;
+  location?: string;
+  about?: string;
+  skills: string[];
+  experience: Experience[];
+  education: Education[];
+  connections: Connection[];
+}
+
+// Define the User document type
+interface UserDocument extends IUser, mongoose.Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const userSchema = new mongoose.Schema<UserDocument>(
   {
     name: {
       type: String,
@@ -60,8 +101,7 @@ const userSchema = new mongoose.Schema(
     ],
     connections: [
       {
-        userId: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       },
     ],
   },
@@ -70,4 +110,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model<UserDocument>("User", userSchema);
+
+export { User, IUser, UserDocument };
