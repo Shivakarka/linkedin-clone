@@ -1,10 +1,19 @@
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import Layout from "./components/layout/Layout";
+import HomePage from "./pages/HomePage";
+import SignUpPage from "./pages/auth/SignUpPage";
+import LoginPage from "./pages/auth/LoginPage";
 
 function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </Layout>
   );
 }
 
