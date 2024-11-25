@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { axiosInstance } from "../../lib/axios";
 import {toast} from "react-hot-toast";
@@ -13,6 +13,8 @@ type FormParams = {
 
 const SignUpForm = () => {
 
+const queryClient = useQueryClient();
+
 const [name,setName] = useState('');
 const [email,setEmail] = useState('');
 const [username,setUsername] = useState('');
@@ -24,7 +26,8 @@ const {mutate: signUpMutation, isPending} = useMutation({
         return response.data;
     },
     onSuccess: (data) => {
-        toast.success(data?.message);
+        toast.success(data?.message);       
+        queryClient.invalidateQueries({queryKey: ["authUser"]});      
     },
     onError: (error) => {            
         toast.error((error as any)?.response?.data?.message);
