@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import protectRoute from "../middleware/auth.middleware";
 import {
   createComment,
@@ -13,54 +13,62 @@ const router = express.Router();
 
 router.get(
   "/",
-  (req, res, next) => {
+  (req: Request, res: Response, next: NextFunction) => {
     protectRoute(req, res, next);
   },
-  (req, res) => {
+  (req: Request, res: Response) => {
     getFeedPosts(req, res);
   }
 );
 
 router.post(
   "/create",
-  (req, res, next) => {
+  (req: Request, res: Response, next: NextFunction) => {
     protectRoute(req, res, next);
   },
-  createPost
+  (req: Request, res: Response) => {
+    createPost(req, res);
+  }  
 );
 
 router.delete(
   "/delete/:id",
-  (req, res, next) => {
+  (req: Request, res: Response, next: NextFunction) => {
     protectRoute(req, res, next);
   },
-  (req, res) => {
+  (req: Request, res: Response) => {
     deletePost(req, res);
-  }
+  }  
 );
 
 router.get(
   "/:id",
-  (res, req, next) => {
-    protectRoute(res, req, next);
+  (req: Request, res: Response, next: NextFunction) => {
+    protectRoute(req, res, next);
   },
-  getPostById
+  (req: Request, res: Response) => {
+    getPostById(req, res);
+  }
 );
 
 router.post(
   "/:id/comment",
-  (res, req, next) => {
-    protectRoute(res, req, next);
+  (req: Request, res: Response, next: NextFunction) => {
+    protectRoute(req, res, next);
   },
-  createComment
+  (req: Request, res: Response) => {
+    createComment(req, res);
+  }
 );
 
 router.post(
   "/:id/like",
-  (res, req, next) => {
-    protectRoute(res, req, next);
+  (req: Request, res: Response, next: NextFunction) => {
+    protectRoute(req, res, next);
   },
-  likePost
+  (req: Request, res: Response) => {
+    likePost(req, res);
+  }
 );
 
 export default router;

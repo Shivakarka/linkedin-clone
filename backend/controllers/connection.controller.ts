@@ -6,7 +6,7 @@ import { sendConnectionAcceptedEmail } from "../emails/emailHandlers";
 
 export const sendConnectionRequest = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
       connections: string[];
     };
@@ -14,6 +14,9 @@ export const sendConnectionRequest = async (
   res: Response
 ) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const { userId } = req.params;
     const senderId = req.user._id;
 
@@ -54,13 +57,16 @@ export const sendConnectionRequest = async (
 
 export const acceptConnectionRequest = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
     };
   },
   res: Response
 ) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const { requestId } = req.params;
     const userId = req.user._id;
 
@@ -130,13 +136,16 @@ export const acceptConnectionRequest = async (
 
 export const rejectConnectionRequest = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
     };
   },
   res: Response
 ) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const { requestId } = req.params;
     const userId = req.user._id;
 
@@ -170,13 +179,17 @@ export const rejectConnectionRequest = async (
 
 export const getConnectionRequests = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
     };
   },
   res: Response
 ) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
 
     const requests = await ConnectionRequest.find({
@@ -193,13 +206,16 @@ export const getConnectionRequests = async (
 
 export const getUserConnections = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
     };
   },
   res: Response
 ) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const userId = req.user._id;
 
     const user = await User.findById(userId).populate(
@@ -220,13 +236,16 @@ export const getUserConnections = async (
 
 export const removeConnection = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
     };
   },
   res: Response
 ) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const myId = req.user._id;
     const { userId } = req.params;
 
@@ -242,7 +261,7 @@ export const removeConnection = async (
 
 export const getConnectionStatus = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
       connections: string[];
     };
@@ -250,6 +269,9 @@ export const getConnectionStatus = async (
   res: Response
 ) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const targetUserId = req.params.userId;
     const currentUserId = req.user._id;
 

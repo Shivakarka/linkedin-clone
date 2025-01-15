@@ -18,7 +18,7 @@ router.post(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    sendConnectionRequest;
+    sendConnectionRequest(req, res);
   }
 );
 router.put(
@@ -27,7 +27,7 @@ router.put(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    acceptConnectionRequest;
+    acceptConnectionRequest(req, res);
   }
 );
 router.put(
@@ -36,7 +36,7 @@ router.put(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    rejectConnectionRequest;
+    rejectConnectionRequest(req, res);
   }
 );
 // Get all connection requests for the current user
@@ -46,7 +46,7 @@ router.get(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    getConnectionRequests;
+    getConnectionRequests(req, res);
   }
 );
 // Get all connections for a user
@@ -56,7 +56,7 @@ router.get(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    getUserConnections;
+    getUserConnections(req, res);
   }
 );
 router.delete(
@@ -65,7 +65,7 @@ router.delete(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    removeConnection;
+    removeConnection(req, res);
   }
 );
 router.get(
@@ -74,7 +74,7 @@ router.get(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    getConnectionStatus;
+    getConnectionStatus(req, res);
   }
 );
 

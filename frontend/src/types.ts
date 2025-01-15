@@ -50,4 +50,5 @@ export interface PostData {
   comments?: Comment[];
   createdAt?: Date;
   updatedAt?: Date;
+  _id?: string;
 }

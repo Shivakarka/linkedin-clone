@@ -3,13 +3,16 @@ import Notification from "../models/notification.model";
 
 export const getUserNotifications = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
     };
   },
   res: Response
 ) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const notifications = await Notification.find({ recipient: req.user._id })
       .sort({ createdAt: -1 })
       .populate("relatedUser", "name username profilePicture")
@@ -24,7 +27,7 @@ export const getUserNotifications = async (
 
 export const markNotificationAsRead = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
     };
   },
@@ -32,6 +35,9 @@ export const markNotificationAsRead = async (
 ) => {
   const notificationId = req.params.id;
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const notification = await Notification.findByIdAndUpdate(
       { _id: notificationId, recipient: req.user._id },
       { read: true },
@@ -47,7 +53,7 @@ export const markNotificationAsRead = async (
 
 export const deleteNotification = async (
   req: Request & {
-    user: {
+    user?: {
       _id: string;
     };
   },
@@ -56,6 +62,9 @@ export const deleteNotification = async (
   const notificationId = req.params.id;
 
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     await Notification.findOneAndDelete({
       _id: notificationId,
       recipient: req.user._id,

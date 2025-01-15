@@ -14,7 +14,7 @@ router.get(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    getUserNotifications;
+    getUserNotifications(req, res);
   }
 );
 
@@ -24,7 +24,7 @@ router.put(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    markNotificationAsRead;
+    markNotificationAsRead(req, res);
   }
 );
 
@@ -34,7 +34,7 @@ router.delete(
     protectRoute(req, res, next);
   },
   (req: Request, res: Response) => {
-    deleteNotification;
+    deleteNotification(req, res);
   }
 );
 
