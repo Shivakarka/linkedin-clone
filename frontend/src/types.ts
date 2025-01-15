@@ -35,3 +35,19 @@ export interface UserProfile {
   updatedAt: Date;
   __v: number;
 }
+
+export interface Comment {
+  content: string;
+  user: string;
+  createdAt: Date;
+}
+
+export interface PostData {
+  author?: string;
+  content?: string;
+  image?: string;
+  likes?: string[];
+  comments?: Comment[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}

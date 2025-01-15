@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 import Sidebar from "../components/Sidebar";
 import { UserProfile } from "../types";
+import PostCreation from "../components/PostCreation";
 
 const HomePage = () => {
   const { data: authUser } = useQuery<UserProfile>({ queryKey: ["authUser"] });
@@ -28,6 +29,9 @@ const HomePage = () => {
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div className="hidden lg:block lg:col-span-1">
         <Sidebar user={authUser ?? ({} as UserProfile)} />
+      </div>
+      <div className="col-span-1 lg:col-span-2 order-first lg:order-none">
+        <PostCreation user={authUser ?? ({} as UserProfile)} />
       </div>
     </div>
   );
