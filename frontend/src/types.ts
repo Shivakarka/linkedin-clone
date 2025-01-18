@@ -18,37 +18,39 @@ interface Connection {
 }
 
 export interface UserProfile {
-  _id: string;
-  name: string;
-  username: string;
-  email: string;
-  profilePicture: string;
-  coverPicture: string;
-  headline: string;
-  location: string;
-  about: string;
-  skills: string[];
-  experience: Experience[];
-  education: Education[];
-  connections: Connection[];
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
+  _id?: string;
+  name?: string;
+  username?: string;
+  email?: string;
+  profilePicture?: string;
+  coverPicture?: string;
+  headline?: string;
+  location?: string;
+  about?: string;
+  skills?: string[];
+  experience?: Experience[];
+  education?: Education[];
+  connections?: Connection[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: number;
 }
 
 export interface Comment {
   content: string;
-  user: string;
+  user: UserProfile;
   createdAt: Date;
 }
 
 export interface PostData {
-  author?: string;
+  author: UserProfile;
   content?: string;
   image?: string;
   likes?: string[];
   comments?: Comment[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
   _id?: string;
 }
+
+export default PostData;

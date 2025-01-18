@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 import Sidebar from "../components/Sidebar";
-import { UserProfile } from "../types";
+import PostData, { UserProfile } from "../types";
 import PostCreation from "../components/PostCreation";
 import { Users } from "lucide-react";
 import RecommendedUser from "../components/RecommendedUser";
+import Post from "../components/Post";
 
 const HomePage = () => {
   const { data: authUser } = useQuery<UserProfile>({ queryKey: ["authUser"] });
@@ -34,6 +35,9 @@ const HomePage = () => {
       </div>
       <div className="col-span-1 lg:col-span-2 order-first lg:order-none">
         <PostCreation user={authUser ?? ({} as UserProfile)} />
+        {posts?.map((post: PostData) => (
+          <Post key={post._id} post={post} />
+        ))}
         {posts?.length === 0 && (
           <div className="bg-white rounded-lg shadow p-8 text-center">
             <div className="mb-6">
