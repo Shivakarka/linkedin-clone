@@ -43,14 +43,23 @@ export interface Comment {
 }
 
 export interface PostData {
-  author: UserProfile;
+  author?: UserProfile;
   content?: string;
   image?: string;
   likes?: string[];
   comments?: Comment[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   _id?: string;
 }
 
-export default PostData;
+export interface NotificationData {
+  recipient: UserProfile | string;
+  type: "like" | "comment" | "connectionAccepted";
+  relatedUser?: UserProfile;
+  relatedPost: PostData;
+  read: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  _id: string;
+}

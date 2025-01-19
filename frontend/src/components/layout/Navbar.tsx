@@ -2,39 +2,32 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
 import { Link } from "react-router-dom";
 import { Bell, Home, LogOut, User, Users } from "lucide-react";
-
-interface Notification {
-  _id: string;
-  recipient: string;
-  type: "like" | "comment" | "connectionAccepted";
-  relatedUser?: string;
-  relatedPost?: string;
-  read: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface authUser {
-  username: string;
-}
+import { NotificationData, UserProfile } from "../../types";
 
 const Navbar = () => {
-  const { data: authUser } = useQuery<authUser>({
+  const { data: authUser } = useQuery<UserProfile>({
     queryKey: ["authUser"],
   });
 
   const queryClient = useQueryClient();
 
-  const { data: notifications } = useQuery<Notification[]>({
+  const { data: notificationsResponse } = useQuery<{
+    data: NotificationData[];
+  }>({
     queryKey: ["notifications"],
     queryFn: async () => {
-      const response = await axiosInstance.get<Notification[]>(
+      const response = await axiosInstance.get<{ data: NotificationData[] }>(
         "/notifications"
       );
       return response.data;
     },
     enabled: !!authUser,
   });
+
+  const notifications =
+    notificationsResponse && Array.isArray(notificationsResponse.data)
+      ? notificationsResponse.data
+      : notificationsResponse;
 
   const { data: connectionRequests } = useQuery({
     queryKey: ["connectionRequests"],
@@ -49,12 +42,10 @@ const Navbar = () => {
     },
   });
 
-  const unreadNotificationCount =
-    notifications?.filter((notif) => !notif.read).length || 0;
-  const unreadConnectionRequestsCount = connectionRequests?.data?.length;
-
-  console.log(notifications);
-  console.log(connectionRequests);
+  const unreadNotificationCount = Array.isArray(notifications)
+    ? notifications.filter((notif) => !notif.read).length
+    : 0;
+  const unreadConnectionRequestsCount = connectionRequests?.data?.length || 0;
 
   return (
     <nav className="bg-secondary shadow-md sticky top-0 z-10">

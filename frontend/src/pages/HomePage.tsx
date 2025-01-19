@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 import Sidebar from "../components/Sidebar";
-import PostData, { UserProfile } from "../types";
+import { UserProfile, PostData } from "../types";
 import PostCreation from "../components/PostCreation";
 import { Users } from "lucide-react";
 import RecommendedUser from "../components/RecommendedUser";

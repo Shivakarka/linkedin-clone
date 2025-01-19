@@ -114,7 +114,7 @@ const Post = ({ post }: { post: PostData }) => {
               </Link>
               <p className="text-xs text-info">{post?.author?.headline}</p>
               <p className="text-xs text-info">
-                {formatDistanceToNow(new Date(post?.createdAt), {
+                {formatDistanceToNow(new Date(post?.createdAt || ""), {
                   addSuffix: true,
                 })}
               </p>
