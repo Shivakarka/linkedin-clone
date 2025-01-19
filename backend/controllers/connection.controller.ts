@@ -235,7 +235,11 @@ export const getUserConnections = async (
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json(user.connections);
+    const connectedUsers = await User.find({
+      _id: { $in: user.connections },
+    }).select("name username profilePicture headline connections");
+
+    res.json(connectedUsers);
   } catch (error) {
     console.error("Error in getUserConnections controller:", error);
     res.status(500).json({ message: "Server error" });

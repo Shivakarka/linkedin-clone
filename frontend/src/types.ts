@@ -63,3 +63,12 @@ export interface NotificationData {
   updatedAt: Date;
   _id: string;
 }
+
+export interface ConnectionRequest {
+  sender: UserProfile;
+  recipient: UserProfile;
+  status: "pending" | "accepted" | "rejected";
+  createdAt: Date;
+  updatedAt: Date;
+  _id?: string;
+}
