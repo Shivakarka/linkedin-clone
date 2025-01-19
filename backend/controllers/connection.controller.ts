@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { User } from "../models/user.model";
 import Notification from "../models/notification.model";
 import { sendConnectionAcceptedEmail } from "../emails/emailHandlers";
+import mongoose from "mongoose";
 
 export const sendConnectionRequest = async (
   req: Request & {
@@ -59,6 +60,7 @@ export const acceptConnectionRequest = async (
   req: Request & {
     user?: {
       _id: string;
+      connections: string[];
     };
   },
   res: Response
@@ -68,7 +70,7 @@ export const acceptConnectionRequest = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
     const { requestId } = req.params;
-    const userId = req.user._id;
+    const userId = req?.user._id;
 
     const request = (await ConnectionRequest.findById(requestId)
       .populate("sender", "name email username")
@@ -94,13 +96,19 @@ export const acceptConnectionRequest = async (
     request.status = "accepted";
     await request.save();
 
-    // if I am your friend then you are also my friend ;)
-    await User.findByIdAndUpdate(request.sender._id, {
-      $addToSet: { connections: userId },
-    });
-    await User.findByIdAndUpdate(userId, {
-      $addToSet: { connections: request.sender._id },
-    });
+    // if im your friend then ur also my friend ;)
+    const sender = (await User.findById(request.sender._id)) as any;
+    const recipient = (await User.findById(userId)) as any;
+
+    if (!sender || !recipient) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    sender.connections.push(userId);
+    recipient.connections.push(request.sender._id);
+
+    await sender.save();
+    await recipient.save();
 
     const notification = new Notification({
       recipient: request.sender._id,

@@ -10,13 +10,27 @@ export const getFeedPosts = async (
   res: Response
 ) => {
   try {
+    const userId = req.user._id;
+
+    // Fetch and populate the user's connections
+    const user = await User.findById(userId).populate("connections");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Extract connection IDs
+    const userConnections = user.connections.map(
+      (connection: any) => connection._id
+    );
+
+    // Query posts by author
     const posts = await Post.find({
-      author: { $in: [...req.user.connections, req.user._id] },
+      author: { $in: [...userConnections, userId] },
     })
       .populate("author", "name username profilePicture headline")
       .populate("comments.user", "name profilePicture")
       .sort({ createdAt: -1 });
-
     res.status(200).json(posts);
   } catch (error) {
     console.error("Error in getFeedPosts controller:", error);
