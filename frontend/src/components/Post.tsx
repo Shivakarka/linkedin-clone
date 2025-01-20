@@ -3,7 +3,7 @@ import { Comment, PostData, UserProfile } from "../types";
 import { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Loader,
   MessageCircle,
@@ -16,6 +16,7 @@ import { formatDistanceToNow } from "date-fns";
 import PostAction from "./PostAction";
 
 const Post = ({ post }: { post: PostData }) => {
+  const { postId } = useParams();
   const { data: authUser } = useQuery<UserProfile>({ queryKey: ["authUser"] });
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -60,6 +61,7 @@ const Post = ({ post }: { post: PostData }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postId] });
     },
   });
 
