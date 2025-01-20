@@ -3,6 +3,7 @@ import { axiosInstance } from "../../lib/axios";
 import { Link } from "react-router-dom";
 import { Bell, Home, LogOut, User, Users } from "lucide-react";
 import { NotificationData, UserProfile } from "../../types";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { data: authUser } = useQuery<UserProfile>({
@@ -39,6 +40,7 @@ const Navbar = () => {
     mutationFn: () => axiosInstance.post("/auth/logout"),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success("Logged out successfully");
     },
   });
 

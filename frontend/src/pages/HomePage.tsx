@@ -6,9 +6,12 @@ import PostCreation from "../components/PostCreation";
 import { Users } from "lucide-react";
 import RecommendedUser from "../components/RecommendedUser";
 import Post from "../components/Post";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const { data: authUser } = useQuery<UserProfile>({ queryKey: ["authUser"] });
+
+  const navigate = useNavigate();
 
   const { data: recommendedUsers } = useQuery({
     queryKey: ["recommendedUsers"],
@@ -26,9 +29,7 @@ const HomePage = () => {
     },
   });
 
-  // console.log({ authUser, recommendedUsers, posts });
-
-  return (
+  return authUser ? (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div className="hidden lg:block lg:col-span-1">
         <Sidebar user={authUser ?? ({} as UserProfile)} />
@@ -62,6 +63,21 @@ const HomePage = () => {
           </div>
         </div>
       )}
+    </div>
+  ) : (
+    <div className="flex flex-col items-center justify-center space-y-4 min-h-[70vh]">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-4">Welcome to LinkedIn</h1>
+        <p className="text-gray-600 mb-4">
+          Connect with your friends and colleagues.
+        </p>
+      </div>
+      <button
+        onClick={() => navigate("/login")}
+        className="bg-primary text-white px-4 py-2 rounded-lg"
+      >
+        Proceed to Login
+      </button>
     </div>
   );
 };
