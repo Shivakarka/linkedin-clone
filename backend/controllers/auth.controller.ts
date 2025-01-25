@@ -45,8 +45,8 @@ export const signup = async (
     res.cookie("jwt-linkedin", token, {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
       sameSite: "none",
+      secure: true,
     });
 
     res.status(201).json({ message: "User registered successfully" });
@@ -98,7 +98,7 @@ export const login = async (
       httpOnly: true,
       maxAge: 3 * 24 * 60 * 60 * 1000,
       sameSite: "none",
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
     });
 
     res.json({ message: "Logged in successfully" });
