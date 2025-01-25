@@ -1,16 +1,18 @@
 interface Experience {
+  _id?: string;
   title: string;
   company: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
   description: string;
 }
 
 interface Education {
+  _id?: string;
   school: string;
   fieldOfStudy: string;
-  startYear: number;
-  endYear: number;
+  startYear: string | number;
+  endYear: string | number;
 }
 
 interface Connection {
