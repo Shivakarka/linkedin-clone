@@ -72,7 +72,8 @@ export const login = async (
 ) => {
   try {
     console.log("Login request body:", req.body);
-    const { username, password } = req.body;
+    let { username, password } = req.body;
+    username = username.toLowerCase();
 
     if (!username || !password) {
       return res
@@ -82,6 +83,7 @@ export const login = async (
 
     // Check if user exists
     const user = await User.findOne({ username });
+    console.log("User found:", user);
     if (!user) {
       return res.status(400).json({
         message: `User not found with username ${username}. Invalid credentials`,
