@@ -21,6 +21,7 @@ const Post = ({ post }: { post: PostData }) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState<Comment[]>(post.comments || []);
+  const [imageLoading, setImageLoading] = useState(true);
   const isOwner = authUser?._id === post?.author?._id;
   const isLiked = post.likes?.includes(authUser?._id as string);
 
@@ -137,11 +138,22 @@ const Post = ({ post }: { post: PostData }) => {
         </div>
         <p className="mb-4">{post.content}</p>
         {post.image && (
-          <img
-            src={post.image}
-            alt="Post content"
-            className="rounded-lg w-full mb-4"
-          />
+          <div className="relative">
+            {imageLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-base-200">
+                <Loader size={24} className="animate-spin" />
+              </div>
+            )}
+            <img
+              src={post.image}
+              alt="Post content"
+              className={`rounded-lg w-full mb-4 ${
+                imageLoading ? "opacity-0" : "opacity-100"
+              } transition-opacity duration-300`}
+              onLoad={() => setImageLoading(false)}
+              onError={() => setImageLoading(false)}
+            />
+          </div>
         )}
 
         <div className="flex justify-between text-info">

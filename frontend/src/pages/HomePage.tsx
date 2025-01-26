@@ -13,15 +13,16 @@ const HomePage = () => {
 
   const navigate = useNavigate();
 
-  const { data: recommendedUsers } = useQuery({
-    queryKey: ["recommendedUsers"],
-    queryFn: async () => {
-      const res = await axiosInstance.get("/users/suggestions");
-      return res.data;
-    },
-  });
+  const { data: recommendedUsers, isPending: isRecommendationsPending } =
+    useQuery({
+      queryKey: ["recommendedUsers"],
+      queryFn: async () => {
+        const res = await axiosInstance.get("/users/suggestions");
+        return res.data;
+      },
+    });
 
-  const { data: posts } = useQuery({
+  const { data: posts, isPending: isPostPending } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
       const res = await axiosInstance.get("/posts");
@@ -36,9 +37,11 @@ const HomePage = () => {
       </div>
       <div className="col-span-1 lg:col-span-2 order-first lg:order-none">
         <PostCreation user={authUser ?? ({} as UserProfile)} />
-        {posts?.map((post: PostData) => (
-          <Post key={post._id} post={post} />
-        ))}
+        {isPostPending ? (
+          <span className="loading loading-bars loading-lg mx-[50%] my-[50%]"></span>
+        ) : (
+          posts?.map((post: PostData) => <Post key={post._id} post={post} />)
+        )}
         {posts?.length === 0 && (
           <div className="bg-white rounded-lg shadow p-8 text-center">
             <div className="mb-6">
@@ -53,6 +56,11 @@ const HomePage = () => {
           </div>
         )}
       </div>
+      {isRecommendationsPending && (
+        <div className="col-span-1 lg:col-span-1 hidden lg:block">
+          <span className="loading loading-bars loading-lg mx-[50%] my-[50%]"></span>
+        </div>
+      )}
       {recommendedUsers?.length > 0 && (
         <div className="col-span-1 lg:col-span-1 hidden lg:block">
           <div className="bg-secondary rounded-lg shadow p-4">
