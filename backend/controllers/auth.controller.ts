@@ -121,7 +121,10 @@ export const logout = async (
   res: Response,
   next?: NextFunction
 ) => {
-  res.clearCookie("jwt-linkedin");
+  res.clearCookie("jwt-linkedin", {
+    sameSite: "none",
+    secure: true,
+  });
   res.json({ message: "Logged out successfully" });
 };
 
