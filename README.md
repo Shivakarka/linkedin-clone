@@ -7,6 +7,9 @@ A full-stack LinkedIn clone built with React, TypeScript, Node.js, and MongoDB.
 - Frontend: [https://linkedinclone-frontend.vercel.app/](https://linkedinclone-frontend.vercel.app/)
 - Backend: [https://linkedin-clone-backend.vercel.app/](https://linkedin-clone-backend.vercel.app/)
 
+![Preview](https://github.com/user-attachments/assets/aa547ece-51e7-4823-917c-4a9cfd997155)
+
+
 ## ⚙️ Tech Stack
 
 ### Frontend
