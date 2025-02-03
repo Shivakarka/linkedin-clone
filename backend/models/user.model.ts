@@ -16,7 +16,7 @@ type Education = {
 };
 
 type Connection = {
-  userId: mongoose.Schema.Types.ObjectId;
+  _id: mongoose.Schema.Types.ObjectId;
 };
 
 interface IUser {
@@ -32,7 +32,11 @@ interface IUser {
   skills: string[];
   experience: Experience[];
   education: Education[];
-  connections: Connection[];
+  connections: [
+    {
+      _id: { type: mongoose.Schema.Types.ObjectId; ref: "User" };
+    }
+  ];
 }
 
 // Define the User document type

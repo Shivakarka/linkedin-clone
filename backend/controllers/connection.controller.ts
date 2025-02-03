@@ -260,11 +260,37 @@ export const removeConnection = async (
     }
     const myId = req.user._id;
     const { userId } = req.params;
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
 
-    await User.findByIdAndUpdate(myId, { $pull: { connections: userId } });
-    await User.findByIdAndUpdate(userId, { $pull: { connections: myId } });
+    if (!myId || !userId) {
+      return res.status(400).json({ message: "Invalid user IDs" });
+    }
 
-    res.json({ message: "Connection removed successfully" });
+    let updatedMyUser = await User.findById(myId);
+    let updatedTargetUser = await User.findById(userId);
+
+    const updatedMyConnections = updatedMyUser?.connections?.filter(
+      (connection) => connection._id.toString() !== userId.toString() // Changed from connectionId
+    );
+
+    const updatedTargetConnections = updatedTargetUser?.connections?.filter(
+      (connection) => connection._id.toString() !== myId.toString()
+    );
+
+    // Update user documents
+    await User.findByIdAndUpdate(myId, {
+      connections: updatedMyConnections,
+    });
+
+    await User.findByIdAndUpdate(userId, {
+      connections: updatedTargetConnections,
+    });
+
+    res.json({
+      message: "Connection removed successfully",
+    });
   } catch (error) {
     console.error("Error in removeConnection controller:", error);
     res.status(500).json({ message: "Server error" });
